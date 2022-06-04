@@ -1,3 +1,3 @@
 # PhotoTransfer
 
-An automated script for `creating` folders and `transfering` photos.
+Automated scripts for `creating folders` and `transferring photos`.
