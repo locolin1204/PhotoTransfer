@@ -1,3 +1,9 @@
 # PhotoTransfer
 
-Automated scripts for `creating folders` and `transferring photos`.
+Automated scripts for `creating folders`, `transferring photos` and `transferring videos`.
+
+Convert `.ARW` files to `.DNG`
+
+`phototransfer.py`
+`phototransfer_edit.py`
+`phototransfer_film.py`

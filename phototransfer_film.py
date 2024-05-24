@@ -34,7 +34,7 @@ TOpath = path_test_month
 os.chdir(TOpath)
 print("\nPath:", TOpath)
 
-event = input("\nWhat is this film (Format: brand_filmNameWithISO): ")
+event = input("\nWhat is this film (Format: brand_filmNameWithISO | fuji_fujicolor100) : ")
 todayfile = today.strftime("%Y-%m-%d")
 dirname = todayfile + " " + event
 print("Directory:", dirname)
