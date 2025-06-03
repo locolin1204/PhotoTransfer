@@ -1,3 +1,4 @@
+import datetime
 import os
 from datetime import date
 import shutil
@@ -7,6 +8,7 @@ import time
 import asyncio
 from asyncio.subprocess import PIPE, Process
 import glob
+import inquirer
 
 
 def create_folders(path_test, path_create, cur_date):
@@ -156,10 +158,36 @@ def check_file_exists(directory, extensions):
 
 
 def main():
-    original_photo_dest = "/Volumes/LHTC Hard Drive 2/Photos/"
-    # original_photo_dest = "/Users/colinlo/Downloads/Photos/DEST/"
-    original_video_dest = "/Volumes/LHTC Hard Drive 2/Videos/"
-    # original_video_dest = "/Users/colinlo/Downloads/Photos/VID/"
+    # original_photo_dest = "/Volumes/LHTC Hard Drive 2/Photos/"
+    # original_photo_dest = "/Volumes/G-DRIVE SSD LHTC/Photos/"
+    # original_video_dest = "/Volumes/LHTC Hard Drive 2/Videos/"
+    # original_video_dest = "/Volumes/G-DRIVE SSD LHTC/Videos/"
+
+    harddrive_name = "LHTC Hard Drive 2"
+    ssd_name = "G-DRIVE SSD LHTC"
+
+    harddrive_path = f"/Volumes/{harddrive_name}/"
+    ssd_path = f"/Volumes/{ssd_name}/"
+
+    is_harddrive_exist = os.path.exists(harddrive_path)
+    is_ssd_exist = os.path.exists(ssd_path)
+
+    if is_harddrive_exist and is_ssd_exist:
+        storage_question = [
+            inquirer.List('dest',
+                          message="Where to store?",
+                          choices=[harddrive_name, ssd_name],
+                          ),
+        ]
+        storage_ans = inquirer.prompt(storage_question)
+        original_dest = harddrive_path if storage_ans["dest"] == harddrive_name else ssd_path
+    elif is_harddrive_exist:
+        original_dest = harddrive_path
+    else:
+        original_dest = ssd_path
+
+    original_photo_dest = original_dest + "Photos/"
+    original_video_dest = original_dest + "Videos/"
 
     source_path = '/Volumes/NO NAME/DCIM'
     source_path_vid = '/Volumes/NO NAME/PRIVATE/M4ROOT/CLIP'
@@ -168,6 +196,22 @@ def main():
     vid_ext = ['mov', 'mp4']
 
     today = date.today()
+
+    if datetime.datetime.now().hour <= 3:
+        yesterday = (today - datetime.timedelta(days=1))
+        date_format = "%d-%m-%Y"
+        yesterday_choice = f"[Yesterday] [{yesterday.strftime(date_format)}]"
+        today_choice = f"[Today] [{today.strftime(date_format)}]"
+        date_question = [
+            inquirer.List('date',
+                          message="When is the photo taken?",
+                          choices=[yesterday_choice, today_choice],
+                          ),
+        ]
+        date_ans = inquirer.prompt(date_question)
+        if date_ans["date"] == yesterday_choice:
+            today = yesterday
+
     this_year = today.strftime("%Y")
     this_month = today.strftime("%m %B")
 
